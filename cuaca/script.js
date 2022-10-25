@@ -131,15 +131,15 @@ tbutton.addEventListener('click', async function(){
     try {
         let userinput = document.querySelector('.input')
         let data = await GetApiFilm(userinput.value)
-        LoopCardFilm(data)            
+        LoopListFillm(data)              
     } catch (err) {
         alert(err)
-        console.log(err)
+        console.error(err)
     }
 })
 
-function GetApiFilm(inputkey) {
-    return  fetch('https://www.omdbapi.com/?apikey=4fe3c0c&s=' + inputkey)
+function GetApiFilm(input) {
+    return fetch('https://www.omdbapi.com/?apikey=4fe3c0c&s=' + input)
             .then(response => {
                 if (response.ok !== true) {
                     throw new Error(response.statusText)
@@ -154,13 +154,14 @@ function GetApiFilm(inputkey) {
             })
 }
 
-function LoopCardFilm(data) {
+function LoopListFillm(data) {
     let str = ''
     for (const x of data) {
         str += MovieList(x)
     }
     let card = document.querySelector('.cards')
     card.innerHTML = str
+
 }
 
 function MovieList(x) {
@@ -180,17 +181,17 @@ document.addEventListener('click', async function(e){
     if (e.target.classList.contains('modal-button')) {
         try {
             let imdb = e.target.dataset.imdb
-            let datadetails = await GetApiFilmDetails(imdb)
-            GetDataFilms(datadetails)                            
+            let datadetails = await GetDetailsApi(imdb)
+            GetInfoDetails(datadetails)                
         } catch (err) {
             alert(err)
-            console.log(err)            
+            console.error(err)
         }
     }
 })
 
-function GetApiFilmDetails(imdbid) {
-    return fetch('https://www.omdbapi.com/?apikey=4fe3c0c&i=' + imdbid)
+function GetDetailsApi(imdb) {
+    return fetch('https://www.omdbapi.com/?apikey=4fe3c0c&i=' + imdb)
             .then(response => {
                 if (response.ok === false) {
                     throw new Error(response.statusText)
@@ -200,10 +201,10 @@ function GetApiFilmDetails(imdbid) {
             .then(response => response)
 }
 
-function GetDataFilms(e) {
-    let uiDetail =  MovieDetail(e)
-    let isidetail = document.querySelector('.modal-body')
-    isidetail.innerHTML = uiDetail
+function GetInfoDetails(e) {
+    let info = MovieDetail(e)
+    let btninfo = document.querySelector('.modal-body')
+    btninfo.innerHTML = info
 }
 
 function MovieDetail(e) {
